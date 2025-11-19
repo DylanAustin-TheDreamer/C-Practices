@@ -161,7 +161,7 @@ int main()  // a function called main that receives no argument values
           // it was to do with negative float numbers for our result
           unsigned int window = 0;
           // Q stands for quotient which is the result of how many times the divisor goes into the dividend.
-          // This needs to be accumulated each iteration resulting in a list of binary bits. (thus the number)
+          // This needs to be accumulated each iteration resulting in a list of binary bits. (we initialize its value to 0)
           unsigned int Q = 0;
           
           // we need a for loop to increment for each bit
