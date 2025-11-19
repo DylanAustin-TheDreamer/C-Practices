@@ -32,6 +32,13 @@ int full_adder(int A, int B, int carry, int *sum, int *Cout);
 // Just neat to remember everything starts from simple logic units.
 
 
+// here I'm setting the prototype functions based on the barrel shifter in the CPU.
+// I'll tackle this soonish. Apparently it will be simpler than the division functions
+MUX(int A, int B, int control); // select between A or B
+shift_stage(int input, int positions, int control); // one stage
+barrel_shift(int input, int amount); // combine all stages
+
+
 
 int main()  // a function called main that receives no argument values
 {
