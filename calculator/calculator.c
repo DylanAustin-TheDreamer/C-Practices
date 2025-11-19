@@ -165,7 +165,7 @@ int main()  // a function called main that receives no argument values
           unsigned int Q = 0;
           
           // we need a for loop to increment for each bit
-          for (int i = 32; i >= 0; i--){
+          for (int i = 31; i >= 0; i--){
               int sum_bit;
               int carry_out;
               // Observe - window shifted left 1 bit place - last bit place equal'd to current bit.
