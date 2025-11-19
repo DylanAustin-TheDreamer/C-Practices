@@ -20,7 +20,7 @@ int XOR(int A, int B);
 int NOT(int A);
 // these functions represent adders which are made up of a combination of gates mentioned above - but not all of them at once because they serve different functionality.
 int half_adder(int A, int B, int *sum, int *carry);
-int full_adder(half_adder);
+int full_adder(int A, int B, int carry, int *sum, int *Cout);
 
 // Also, what you may be able to identify, is that the bits form a code that represent a number in binary. Where each decimal place is to the power of 2.
 // lets take the lucky number 7 - does 8 go in 7? nah: 0 - does 4 go in 7? ye: 1 then 7 - 4 = 3 does 2 go in 3? yeah: 1 then 3 - 2 = 1 does 1 go in 1? yeah: 1 - otherwise if it was zero we would have 0
@@ -42,25 +42,31 @@ int main()  // a function called main that receives no argument values
     while(hasEnded == false){
         printf("Enter your desired number input: ");
         scanf(" %d %c %d", &a, &operator, &b);
-        
         while(getchar() != '\n');  // Clear the input buffer
-        if(operator == '+'){
-            binary_adder(a, b, operator);
-        }
-        else if(operator == '-'){
-            binary_subtract(a, b, operator);
-        }
-        else if (operator == '*'){
-            binary_times(a, b, operator);
-        }
-        else if (operator == '/'){
-            binary_divide(a, b, operator);
-        }
-        else{
-            printf("Please use one of the following calculation operators - +, -, * (times), / (divide)\n");
+
+        if (operator == '+'){
+            // set up the binary extraction
+            int result = 0;   // Will hold the final answer
+            int carry = 0;    // Start with no carry
+        
+            for (int i = 0; i < 32; i++){
+                // we use >> operator for bit shifting in C
+                int bit_a = (a >> i) & 1;
+                int bit_b = (b >> i) & 1;
+                int sum_bit;
+                int carry_out;
+                // Call full_adder
+                full_adder(bit_a, bit_b, carry, &sum_bit, &carry_out);
+                // note the addresses trick again. it will wire the pointer in full_adder to our variable set before calling full_adder. Cool stuff.
+                // Store the sum_bit in the result at position i
+                result = result | (sum_bit << i);
+                // Update carry for next iteration
+                carry = carry_out;
+            }
+            printf("Result: %d\n", result);
         }
 
-    };
+    }
 
     return 0;  // indicate that the program ended successfully
 }
@@ -68,15 +74,28 @@ int main()  // a function called main that receives no argument values
 // here we have our adder functions
 // note the pointers in the function parameters. We assign the change in values to the memory address of those variables.
 // no returns
-int half_adder(int A, int B, int *sum, int *carry){
+int half_adder(int A, int B, int *carry, int *sum){
     *sum = XOR(A, B);
     *carry = AND(A, B);
     // We are using assign and no incrementation because we can only have 0s and 1s
-    // How each iteration takes affect when we chain multiple adders together, is that we build up a list of 0s and 1s
+    // How each iteration takes affect after we chain multiple adders together, is that we build up a list of 0s and 1s
     // the next bit position is defined by whether we have a carry over for the next iteration.
 }
-int full_adder(half_adder){
+int full_adder(int A, int B, int carry, int *sum, int*Cout){
+    // two half adders
+    int temp_sum1;
+    int temp_carry1;
+    // this is horrific - but you declare the variables you want to store, and assign their address in the carry and sum field for half_adder
+    // AI isn't giving me code but is acting as a teacher. I don't know actually know C so I'm kinda learning it as we go. Makes me think I don't know programming at all though as well
+    half_adder(A, B, &temp_carry1, &temp_sum1);
+    // recap - The function modifies temp_sum1 and temp_carry1 through the pointers.
 
+    int temp_sum2;
+    int temp_carry2;
+    half_adder(temp_sum1, carry, &temp_carry2, &temp_sum2);
+
+    *Cout = OR(temp_carry1, temp_carry2);
+    *sum = temp_sum2;
 }
 
 
