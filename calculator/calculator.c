@@ -19,7 +19,7 @@ int OR(int A, int B);
 int XOR(int A, int B);
 int NOT(int A);
 // these functions represent adders which are made up of a combination of gates mentioned above - but not all of them at once because they serve different functionality.
-int half_adder(int A, int B, int *sum, int *carry);
+int half_adder(int A, int B, int *carry, int *sum);
 int full_adder(int A, int B, int carry, int *sum, int *Cout);
 
 // Also, what you may be able to identify, is that the bits form a code that represent a number in binary. Where each decimal place is to the power of 2.
@@ -92,7 +92,7 @@ int main()  // a function called main that receives no argument values
             }
             printf("Result: %d\n", result);
         }
-        else if (operator = '*'){
+        else if (operator == '*'){
 
             // Here is what I have to figure this nonesense out
             //
