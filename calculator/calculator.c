@@ -155,13 +155,16 @@ int main()  // a function called main that receives no argument values
         }
         else if (operator == '/'){
           // we need a window scope for going through each bit of the dividend. Expanding the bit spaces each iteration.
-          int window = 0;
+
+          // we had just int before but now we need unsigned (treat as positive only numbers)
+          // it was to do with negative float numbers for our result
+          unsigned int window = 0;
           // Q stands for quotient which is the result of how many times the divisor goes into the dividend.
           // This needs to be accumulated each iteration resulting in a list of binary bits. (thus the number)
-          int Q = 0;
+          unsigned int Q = 0;
           
           // we need a for loop to increment for each bit
-          for (int i = 0; i < 32; i++){
+          for (int i = 32; i >= 0; i--){
               int sum_bit;
               int carry_out;
               // Observe - window shifted left 1 bit place - last bit place equal'd to current bit.
