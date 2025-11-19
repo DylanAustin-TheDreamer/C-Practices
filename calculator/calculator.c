@@ -155,7 +155,8 @@ int main()  // a function called main that receives no argument values
         }
         else if (operator == '/'){
           // we need a window scope for going through each bit of the dividend. Expanding the bit spaces each iteration.
-
+          unsigned int ua = (unsigned int)a;
+          unsigned int ub = (unsigned int)b;
           // we had just int before but now we need unsigned (treat as positive only numbers)
           // it was to do with negative float numbers for our result
           unsigned int window = 0;
@@ -168,14 +169,14 @@ int main()  // a function called main that receives no argument values
               int sum_bit;
               int carry_out;
               // Observe - window shifted left 1 bit place - last bit place equal'd to current bit.
-              window = (window << 1) | ((a >> i) & 1); // & here means Extract (mask to get just the last bit)
+              window = (window << 1) | ((ua >> i) & 1); // & here means Extract (mask to get just the last bit)
               // so 1010 & 1 = 0 : last bit is 0 - 1011 & 1 = 1 : last bit is 1
 
               // now otherwise - | 1 : means SET (force the last bit to 1)
               // use & 1 when reading a bit - use | 1 when writing a 1 bit and vice verse for 0.
 
               // is dividend bit more than the divisor's whole binary scope
-              if (window >= b){
+              if (window >= ub){
                   // set a temp result and make sure we reset our carry for each iteration
                   int temp_result = 0;
                   int carry = 1;  // Start with a carry for subtraction
@@ -183,7 +184,7 @@ int main()  // a function called main that receives no argument values
                   for (int j = 0; j < 32; j++){
                       // declare that our bit_result is that of our extracted window in binary bit
                       int bit_result = (window >> j) & 1;
-                      int bit_b = (b >> j) & 1;
+                      int bit_b = (ub >> j) & 1;
                       
                       // we know that if we subtract we want to flip us bits - so all this code should be solid and live here
                       // flip the bit_b to subtract b from window
@@ -204,7 +205,7 @@ int main()  // a function called main that receives no argument values
                 Q = (Q << 1) | 0;
               }
           }
-          printf("Result: %d\n Remainder: %d\n", Q, window);
+          printf("Result: %u\n Remainder: %u\n", Q, window);
         }
     }
   return 0;  // indicate that the program ended successfully
