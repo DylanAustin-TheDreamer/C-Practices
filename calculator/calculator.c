@@ -42,13 +42,16 @@ int main()  // a function called main that receives no argument values
     while(hasEnded == false){
         printf("Enter your desired number input: ");
         scanf(" %d %c %d", &a, &operator, &b);
-        while(getchar() != '\n');  // Clear the input buffer
+        printf("DEBUG: a=%d, operator='%c', b=%d\n", a, operator, b);
 
         if (operator == '+'){
             // set up the binary extraction
             int result = 0;   // Will hold the final answer
             int carry = 0;    // Start with no carry
         
+            // we make a for loop here to increment i 32 times. 32 to represent 32 bit positions.
+            // note that i++ is not mathematical addition used in our calculation. i++ is just a counter increment to move through bit positions (0, 1, 2, 3...)
+            // We dont have the functionality to create binary code on the hardware level - like a calculator sends signals when a button is pressed.
             for (int i = 0; i < 32; i++){
                 // we use >> operator for bit shifting in C
                 int bit_a = (a >> i) & 1;
@@ -58,9 +61,33 @@ int main()  // a function called main that receives no argument values
                 // Call full_adder
                 full_adder(bit_a, bit_b, carry, &sum_bit, &carry_out);
                 // note the addresses trick again. it will wire the pointer in full_adder to our variable set before calling full_adder. Cool stuff.
-                // Store the sum_bit in the result at position i
+                // Store the sum_bit in the result at position i - note the | (upward slash) is a bitwise OR operator.
+                //What it does:
+                // Takes the current result
+                // ORs it with the new bit shifted to position i
+                // This "sets" bit i in the result without destroying other bits
                 result = result | (sum_bit << i);
                 // Update carry for next iteration
+                carry = carry_out;
+            }
+            printf("Result: %d\n", result);
+        }
+        else if (operator == '-'){
+            // set up the binary extraction
+            int result = 0;   // Will hold the final answer
+            int carry = 1;    // Start with no carry
+
+            for (int i = 0; i < 32; i++){
+                int bit_a = (a >> i) & 1;
+                int bit_b = (b >> i) & 1;
+                int sum_bit;
+                int carry_out;
+
+                // flipping the bits of b
+                int flip_b = NOT(bit_b);
+
+                full_adder(bit_a, flip_b, carry, &sum_bit, &carry_out);
+                result = result | (sum_bit << i);
                 carry = carry_out;
             }
             printf("Result: %d\n", result);
@@ -86,7 +113,7 @@ int full_adder(int A, int B, int carry, int *sum, int*Cout){
     int temp_sum1;
     int temp_carry1;
     // this is horrific - but you declare the variables you want to store, and assign their address in the carry and sum field for half_adder
-    // AI isn't giving me code but is acting as a teacher. I don't know actually know C so I'm kinda learning it as we go. Makes me think I don't know programming at all though as well
+    // AI isn't giving me code but is acting as a teacher. I don't actually know C so I'm kinda learning it as we go. Makes me think I don't know programming at all though as well
     half_adder(A, B, &temp_carry1, &temp_sum1);
     // recap - The function modifies temp_sum1 and temp_carry1 through the pointers.
 
@@ -124,6 +151,7 @@ int XOR(int A, int B){
     return 0;
   }
 }
+// for two's complement - my first understanding is subtraction
 int NOT(int A){
    if(A == 1){
     return 0;
