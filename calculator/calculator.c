@@ -27,7 +27,10 @@ int full_adder(int A, int B, int carry, int *sum, int *Cout);
 // so 0111 would be 7. Now, there are types of formatting like ASCII that take binary codes and represent them as characters in the way we see them. letters etc.
 // a letter will represent a number in binary code. And that's how this works. So lets make a calculator knowing what we know now (given you didn't already know).
 
-// fun fact - In the same way we are simulating a calculator in binary - A conceptual simulation has been used to simulate neural networks to develop AI.
+// Note: this is a small example of "functional simulation."
+// The same principle is used at larger scales for things like neural networks.
+// Just neat to remember everything starts from simple logic units.
+
 
 
 int main()  // a function called main that receives no argument values
