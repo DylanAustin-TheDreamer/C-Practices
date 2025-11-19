@@ -92,6 +92,64 @@ int main()  // a function called main that receives no argument values
             }
             printf("Result: %d\n", result);
         }
+        else if (operator = '*'){
+
+            // Here is what I have to figure this nonesense out
+            //
+            //    0101  (5)
+            //  × 0011  (3)
+            //    ------
+            //    0101  (5 × 1, bit 0 of 3)
+            //    0101   (5 × 1, bit 1 of 3, shifted left once)
+            //  + 0000  (5 × 0, bit 2 of 3, shifted left twice)
+            //    ------
+            //    1111   (15)
+
+
+
+            int result = 0;   // Will hold the final answer
+            int shifted_a;
+
+            // here is a complex nest... 
+            // The key concept we're implementing: every time you find a bit in b that equals 1, we add a shifted copy of 'A' to our running total. 
+            // Each of those additions requires the full 32-bit addition loop. This is how multiplication works for shifting binaries
+            // gonna split it up so we can both try and understand it - I did kinda write it but had AI critique it till I got it right
+            for (int i = 0; i < 32; i++){
+                // just state the two - we use them later
+                int sum_bit;
+                int carry_out;
+                // set our bit extractor
+                int bit_b = (b >> i) & 1;
+                // this is the key - if bit is 1
+                if (bit_b == 1){
+                    // shift the whole of A's binaries west
+                    shifted_a = (a << i);
+                    // set a temp result and make sure we reset our carry for each iteration
+                    int temp_result = 0;
+                    int carry = 0;    // Start with no carry
+                    // start the addition loop - increment now known as j
+                    for (int j = 0; j < 32; j++){
+                        // declare that our bit_result is that of our extracted result in binary bit
+                        int bit_result = (result >> j) & 1;
+                        // bit A is now that of the shifted A whole binary number, of which we now want to extract bit by bit
+                        int bit_a = (shifted_a >> j) & 1;
+                        // Call up the full_adder and force to comply with our new bits
+                        full_adder(bit_a, bit_result, carry, &sum_bit, &carry_out);
+                        // temp result = addition of each sum bit
+                        temp_result = temp_result | (sum_bit << j);
+                        // our carry over is that of any remainder
+                        carry = carry_out;
+                    }
+                    // here we say after the loop result is that of the temp result - we don't use result in the inner loop for conflict's sake
+                    // We read from result but write to temp_result, then only update result after the full addition completes.
+                    // This prevents corrupting the value while we're still reading from it.
+                    result = temp_result;
+                }else if (bit_b == 0){
+                    continue;
+                }
+            }
+            printf("Result: %d\n", result);
+        }
 
     }
 
@@ -160,4 +218,6 @@ int NOT(int A){
     return 1;
    }
 }
+
+// Here is for the multiplication process - it needs to loop through addition
 
