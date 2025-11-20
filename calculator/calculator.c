@@ -281,5 +281,17 @@ int NOT(int A){
    }
 }
 
-// Here is for the multiplication process - it needs to loop through addition
+// Here is an implementation of the barrel shifter - or in C known as >> and <<
+// A barrel shifter is a combinational circuit that shifts bits by any amount in a single clock cycle
+// multiple layers of multiplexes (MUXes) arranged in stages. Each stage can shift by a power of 2
 
+
+// Building Blocks
+// Multiplexer (MUX): Chooses between two inputs based on a control signal
+
+// Built from AND, OR, NOT gates
+// If control=0, output=input A
+// If control=1, output=input B
+// Array of MUXes: One for each bit position, all working in parallel
+
+// Cascade stages: Output of stage N feeds into stage N+1
