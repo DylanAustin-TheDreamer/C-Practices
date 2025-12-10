@@ -34,9 +34,9 @@ int full_adder(int A, int B, int carry, int *sum, int *Cout);
 
 // here I'm setting the prototype functions based on the barrel shifter in the CPU.
 // I'll tackle this soonish. Apparently it will be simpler than the division functions
-MUX(int A, int B, int control); // select between A or B
-shift_stage(int input, int positions, int control); // one stage
-barrel_shift(int input, int amount); // combine all stages
+int MUX(int A, int B, int control); // select between A or B
+int shift_stage(int input, int positions, int control); // one stage
+int barrel_shift(int input, int amount); // combine all stages
 
 
 
@@ -293,5 +293,25 @@ int NOT(int A){
 // If control=0, output=input A
 // If control=1, output=input B
 // Array of MUXes: One for each bit position, all working in parallel
+
+int MUX(int A, int B, int control) // select between A or B
+{
+  if (control == 1)
+  {
+    return B;
+  }else{
+    return A;
+  }
+  
+
+}
+shift_stage(int input, int positions, int control) // one stage
+{
+
+}
+barrel_shift(int input, int amount) // combine all stages
+{
+
+}
 
 // Cascade stages: Output of stage N feeds into stage N+1
